@@ -1,8 +1,8 @@
-import requests
 import os
-from pydub import AudioSegment
-import whisper
 
+import requests
+import whisper
+from pydub import AudioSegment
 
 LIVESTREAM_API_BASE_URL = 'https://api.new.livestream.com'
 CHUNK_SIZE = 1024**2
@@ -53,6 +53,7 @@ def trim_audio(mp3_file, start, end):
 
 
 def transcribe_audio(audio_file):
+    print('trascribing audio')
     model = whisper.load_model("base")
     return model.transcribe(audio_file, fp16=False, language='English')["text"]
 
@@ -70,6 +71,9 @@ def main():
         start_trim_time), get_time_in_ms(end_trim_time))
     transcription = transcribe_audio(audio_file_name)
     print(transcription)
+    f = open('transcription.txt', 'w', encoding="utf-8" )
+    f.write(transcription)
+    f.close()
     print('finished')
 
 
